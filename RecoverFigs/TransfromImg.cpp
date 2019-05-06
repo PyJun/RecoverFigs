@@ -7,14 +7,14 @@ void rotatePoint(Mat rot_mat, Point & pot) {
 	p.at<double>(1, 0) = pot.y;
 	p.at<double>(2, 0) = 1;
 	Mat rot_pot = rot_mat * p;
-	pot.x = rot_pot.at<double>(0, 0);
-	pot.y = rot_pot.at<double>(1, 0);
+	pot.x = (int)round(rot_pot.at<double>(0, 0));
+	pot.y = (int)round(rot_pot.at<double>(1, 0));
 }
 
 // 对一个图像进行旋转，同时更新旋转后原图像二点 pot1, pot2 在新图像中的位置
 Mat rotateImg(Mat srcImg, double angle, Point & pot1, Point & pot2) {
 	Mat dstImg(srcImg.size(), srcImg.type(), Scalar::all(255));
-	Point2f center(dstImg.cols / 2, dstImg.rows / 2);
+	Point2f center((float)dstImg.cols / 2, (float)dstImg.rows / 2);
 	Mat rot_mat = getRotationMatrix2D(center, angle, 1);
 	warpAffine(srcImg, dstImg, rot_mat, Size(dstImg.cols, dstImg.rows), INTER_LINEAR, BORDER_CONSTANT, Scalar::all(255));
 	rotatePoint(rot_mat, pot1);

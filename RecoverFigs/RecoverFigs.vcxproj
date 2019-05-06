@@ -121,6 +121,7 @@
     <ClCompile Include="ApproxPoly.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="DetectTarget.cpp" />
     <ClCompile Include="LineFunctons.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -139,6 +140,11 @@
     <Image Include="data\2.png" />
     <Image Include="data\3.png" />
     <Image Include="data\4.png" />
+    <Image Include="data\5.png" />
+    <Image Include="data\6.png" />
+    <Image Include="data\7.png" />
+    <Image Include="data\8.png" />
+    <Image Include="data\9.png" />
     <Image Include="data\cat1.jpg" />
     <Image Include="data\cat2.jpg" />
     <Image Include="data\cat3.jpg" />

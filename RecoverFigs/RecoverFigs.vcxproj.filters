@@ -33,6 +33,9 @@
     <ClCompile Include="MatchImg.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="DetectTarget.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
@@ -71,6 +74,21 @@
       <Filter>资源文件</Filter>
     </Image>
     <Image Include="data\lena.jpg">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\5.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\6.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\7.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\8.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\9.png">
       <Filter>资源文件</Filter>
     </Image>
   </ItemGroup>

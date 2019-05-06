@@ -17,6 +17,7 @@ Mat preSolveImg(Mat srcImg, double c1, double c2, int ksize) {
 	//morphologyEx(tempImg, tempImg, MORPH_OPEN, element2);
 	//threshold(tempImg, tempImg, 220, 255, THRESH_BINARY_INV);
 	Mat dstImg = tempImg;
+	//imshow("dstImg", dstImg);
 	return dstImg;
 }
 

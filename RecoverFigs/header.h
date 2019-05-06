@@ -5,10 +5,10 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
 #include <algorithm>
 #include <opencv2/opencv.hpp>
-//#include <opencv2/stitching.hpp>
-//#include <windows.h>  
+//#include <windows.h>
 
 using namespace std;
 using namespace cv;
@@ -22,7 +22,7 @@ const double ThresholdLen = 0.36;  // 匹配每条边长度的相对比例阈值
 const double ThresholdDir = 12;   // 匹配内角角度的阈值
 const double ThresholdAveDir = 4;  // 匹配所有边平均角度的阈值
 const double ThresholdTolLen = 0.15;  // 匹配所有边长度的相对比例阈值
-const vector<double> Epsilon_Vec{ 2, 3, 4, 6, 8};   // 多边形拟合的可选参数 epsilon， 使其自适应
+const vector<double> Epsilon_Vec{2, 3, 4 ,5, 6, 8};   // 多边形拟合的可选参数 epsilon， 使其自适应
 
 // ApproxPoly.cpp 
 Mat preSolveImg(Mat srcImg, double c1 = Cny1, double c2 = Cny2, int ksize = Ksize);
@@ -38,14 +38,21 @@ Mat rotateImg(Mat srcImg, double angle, Point & pot1, Point & pot2);
 double lineLength(const Point & a, const Point & b);
 double lineDirection(const Point & a, const Point & b);
 
+// DetectTarget.cpp
+vector<Rect> detectTarget(Mat srcImg);
+Mat normalizeImg(Mat srcImg, Rect rect);
+
+
 // MatchImg.cpp
 vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & matchTheta, const vector<Point> & contour1,
 							const vector<Point> & contour2, double thresholdLen = ThresholdLen, 
 							double thresholdDir = ThresholdDir, double thresholdAveDir = ThresholdAveDir);
-bool matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2, 
+double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2, 
 							const vector<double> & epsilon_vec = Epsilon_Vec, double thresholdTolLen = ThresholdTolLen);
 //double matchShape(Mat srcImg1, Mat srcImg2);
 
 // JointImg.cpp
-Mat jointTwo(Mat srcImg1, Mat srcImg2);
+double isJoint(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2);
+Mat jointTwo(const vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2);
 Mat jointImg(vector<Mat> img_vec);
+
