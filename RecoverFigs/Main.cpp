@@ -18,44 +18,45 @@ vector<Mat> getImgVec(const vector<int> nums) {
 }
 
 
-// 这个多图拼接的主函数
+//// 这个多图拼接的主函数
+//int main(int argc, const char * argv) {
+//	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4});
+//	Mat mergedImg = jointImg(img_vec);
+//	if (!mergedImg.empty()) {
+//		imshow("Merged Img", mergedImg);
+//		waitKey(0);
+//	} else {
+//		cout << "无法拼接！" << endl;
+//	}
+//	system("pause");
+//	return 0;
+//}
+
+
+// 这是二图拼接的主函数
 int main(int argc, const char * argv) {
-	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4});
-	Mat mergedImg = jointImg(img_vec);
-	if (!mergedImg.empty()) {
-		imshow("Merged Img", mergedImg);
-		waitKey(0);
+	string img_path1 = getImgPath(2);
+	string img_path2 = getImgPath(3);
+	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
+	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
+	if (srcImg1.empty() || srcImg2.empty()) {
+		cerr << "无法读取原图像" << endl;
 	} else {
-		cout << "无法拼接！" << endl;
+		Mat mergedImg = jointTwo(srcImg1, srcImg2);
+		if (!mergedImg.empty()) {
+			imshow(img_path1, srcImg1);
+			imshow(img_path2, srcImg2);
+			imshow("Merged Img", mergedImg);
+		} else {
+			cout << "无法拼接！" << endl;
+		}
+		waitKey(0);
 	}
 	system("pause");
 	return 0;
 }
 
-
-//// 这是二图拼接的主函数
-//int main(int argc, const char * argv) {
-//	string img_path1 = getImgPath(2);
-//	string img_path2 = getImgPath(3);
-//	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
-//	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
-//	if (srcImg1.empty() || srcImg2.empty()) {
-//		cerr << "无法读取原图像" << endl;
-//	} else {
-//		Mat mergedImg = jointTwo(srcImg1, srcImg2);
-//		if (!mergedImg.empty()) {
-//			imshow(img_path1, srcImg1);
-//			imshow(img_path2, srcImg2);
-//			imshow("Merged Img", mergedImg);
-//		} else {
-//			cout << "无法拼接！" << endl;
-//		}
-//		waitKey(0);
-//	}
-//	system("pause");
-//	return 0;
-//}
-//
+	
 
 
 
