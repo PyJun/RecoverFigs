@@ -1,6 +1,7 @@
 #include "header.h"
 
-const string DIR = "./data/";
+//const string DIR = "./data/";
+const string DIR = "D:/codespace/python/人工智能/深度学习/碎片匹配/data/";
 inline string getImgPath(int i) {
 	return DIR + to_string(i) + string(".png");
 }
@@ -20,7 +21,7 @@ vector<Mat> getImgVec(const vector<int> nums) {
 
 // 这个多图拼接的主函数
 int main(int argc, const char * argv) {
-	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4});
+	vector<Mat> img_vec = getImgVec({ 1, 2, 5});
 	Mat mergedImg = jointImg(img_vec);
 	if (!mergedImg.empty()) {
 		imshow("Merged Img", mergedImg);
@@ -48,14 +49,14 @@ int main(int argc, const char * argv) {
 //			imshow(img_path2, srcImg2);
 //			imshow("Merged Img", mergedImg);
 //		} else {
-//			cout << "无法拼接！" << endl;
+//			cout << "无法拼接！" << endl; 
 //		}
 //		waitKey(0);
 //	}
 //	system("pause");
 //	return 0;
 //}
-//
+
 
 
 
