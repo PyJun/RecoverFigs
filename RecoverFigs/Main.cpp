@@ -19,65 +19,95 @@ vector<Mat> getImgVec(const vector<int> nums) {
 }
 
 
-// 这个多图拼接的主函数
+// 这是二图拼接的主函数
 int main(int argc, const char * argv) {
-	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-	Mat mergedImg = jointImg(img_vec);
-	if (!mergedImg.empty()) {
-		imshow("Merged Img", mergedImg);
-		waitKey(0);
-	} else {
-		cout << "无法拼接！" << endl;
-		waitKey(0);
+	string img_path1 = getImgPath(8);
+	string img_path2 = getImgPath(9);
+	//string img_path2 = "data/qipa.png";
+	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
+	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
+	if (srcImg1.empty() || srcImg2.empty()) {
+		cerr << "无法读取原图像" << endl;
 		system("pause");
+	}
+	else {
+		vector<pair<Point, Point>> pot_vec;
+		if (isJoint(pot_vec, srcImg1, srcImg2) > 0) { 
+			Mat lastImg;
+			Mat mergedImg = jointTwo(pot_vec, lastImg, srcImg1, srcImg2);
+			imshow(img_path1, srcImg1);
+			imshow(img_path2, srcImg2);
+			imshow("Merged Img", mergedImg);
+			waitKey(0);
+		}
+		else {
+			cout << "无法拼接！" << endl;
+			system("pause");
+		}
 	}
 	return 0;
 }
 
+/*
+1
+2
+5
+4
+7
+8
+*/
 
-//
-//// 这是二图拼接的主函数
+
+
+//// 这个多图拼接的主函数
 //int main(int argc, const char * argv) {
-//	string img_path1 = getImgPath(3);
-//	string img_path2 = getImgPath(2);
-//	//string img_path2 = "data/qipa.png";
-//	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
-//	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
-//	if (srcImg1.empty() || srcImg2.empty()) {
-//		cerr << "无法读取原图像" << endl;
-//	} else {
-//		vector<pair<Point, Point>> pot_vec;
-//		isJoint(pot_vec, srcImg1, srcImg2);
-//		Mat mergedImg = jointTwo(pot_vec, srcImg1, srcImg2);
-//		if (!mergedImg.empty()) {
-//			imshow(img_path1, srcImg1);
-//			imshow(img_path2, srcImg2);
-//			imshow("Merged Img", mergedImg);
-//		} else {
-//			cout << "无法拼接！" << endl; 
-//		}
+//	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+//	Mat mergedImg = jointImg(img_vec);
+//	if (!mergedImg.empty()) {
+//		resize(mergedImg, mergedImg, Size(600, 600));
+//		imshow("Merged Img", mergedImg);
 //		waitKey(0);
+//	} else {
+//		cout << "无法拼接！" << endl;
+//		waitKey(0);
+//		system("pause");
 //	}
-//	system("pause");
 //	return 0;
 //}
-
+//
+//
 
 
 //int main() {
-	//	RNG rng(getTickCount());
-	//	int rand = rng.uniform(0, 100);
-	//	cout << rand << endl;
-	//	system("pause");
-	//	return 0;
-	//}
+//		RNG rng(getTickCount());
+//		int rand = rng.uniform(0, 1000) % 9;
+//		cout << rand << endl;
+//		system("pause");
+//		return 0;
+//	}
+//
 
 
-
-
-
-
-
+//int main() {
+//	string img_path1 = getImgPath(1);
+//	string img_path2 = getImgPath(2);
+//	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
+//	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
+//	vector<pair<Point, Point>> pot_vec;
+//	Mat lastImg;
+//	if (isJoint(pot_vec, srcImg1, srcImg2) > 0) { 
+//		Mat mergedImg = jointTwo(pot_vec, lastImg, srcImg1, srcImg2);
+//		imshow("srcImg1", srcImg1);
+//		imshow("srdImg2", srcImg2);
+//		imshow("lastImg", lastImg);
+//		imshow("Merged Img", mergedImg);
+//		waitKey(0);
+//	}
+//
+//	system("pause");
+//	return 0;
+//}
+//
 
 
 
@@ -166,51 +196,5 @@ int main(int argc, const char * argv) {
 
 	waitKey(0);
 	return 0;
-}
-*/
-
-
-/*
-void main()
-{
-	// Mat srcImg1 = imread("E:/money11111/2.jpg");
-	// Mat srcImg2 = imread("E:/money11111/3.jpg");
-	Mat srcImg1 = imread("D:/j计算机设计大赛/lena/3.png");
-	Mat srcImg2 = imread("D:/j计算机设计大赛/lena/4.png");
-
-	//imshow("1", srcImg1);
-	//imshow("2", srcImg2);
-	vector<vector<Point>> contours_poly1 = Function_approxPolyDP(srcImg1);
-	vector<vector<Point>> contours_poly2 = Function_approxPolyDP(srcImg2);
-
-	Mat dstImg1(srcImg1.size(), CV_8UC3, Scalar::all(0));
-	Mat dstImg2(srcImg2.size(), CV_8UC3, Scalar::all(0));
-	drawContours(dstImg1, contours_poly1, 0, Scalar(0, 255, 255), 1, 8);  //绘制
-
-	drawContours(dstImg2, contours_poly2, 0, Scalar(0, 255, 255), 1, 8);  //绘制
-
-	for (int i = 0; i < contours_poly1[0].size(); i++)
-	{
-		//dstImg1.at<Vec3b>(contours_poly1[0][i]) = Vec3b(255, 255, 255);
-		ellipse(dstImg1, contours_poly1[0][i], Size(4, 4), 0, 0, 360, Scalar(255, 255, 255), 1);
-	}
-	for (int i = 0; i < contours_poly2[0].size(); i++)
-	{
-		ellipse(dstImg2, contours_poly2[0][i], Size(4, 4), 0, 0, 360, Scalar(255, 255, 255), 1);
-
-	}
-	imwrite("3.jpg", dstImg1);
-	imwrite("4.jpg", dstImg2);
-	imshow("3", dstImg1);
-	imshow("4", dstImg2);
-
-	double start = GetTickCount();
-
-	double k = matchTwo(srcImg1, contours_poly1, srcImg2, contours_poly2, 5, 2, 10);
-	double end = GetTickCount();
-	cout << "GetTickCount:" << end - start << endl;
-	cout << k << endl;
-
-	waitKey(0);
 }
 */

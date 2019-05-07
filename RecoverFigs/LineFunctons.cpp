@@ -19,3 +19,13 @@ double lineDirection(const Point & a, const Point & b)
 	return theta / PI * 180;
 }
 
+// 计算给定范围内灰度图中的最大的一个像素
+int minMatElemnet(Mat srcImg, Point pot, int range) {
+	Mat dstImg = srcImg(Rect(pot.x - range, pot.y - range, 2*range+1, 2*range+1));
+	int maxElem = 255;
+	MatIterator_<uchar> grayit;
+	for (grayit = dstImg.begin<uchar>(); grayit != dstImg.end<uchar>(); grayit++) {
+		maxElem = min(maxElem, (int)*grayit);
+	}
+	return maxElem;
+}

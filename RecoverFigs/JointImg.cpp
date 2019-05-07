@@ -10,7 +10,7 @@ double isJoint(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2) {
 
 // 对二个原图像进行拼接， 若不能拼接，返回空的 Mat 对象
 // 这里的 srcImg 为三通道图，即 rgb 图
-Mat jointTwo(const vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2) {
+Mat jointTwo(const vector<pair<Point, Point>> & pot_vec, Mat & lastImg, Mat srcImg1, Mat srcImg2) {
 	Point first_p1, last_p1, first_p2, last_p2;
 	first_p1 = pot_vec[0].first;
 	last_p1 = pot_vec[1].first;
@@ -43,6 +43,7 @@ Mat jointTwo(const vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg
 	}
 	// 一般情况下只有一个轮廓
 	Mat comImg = normalizeImg(comImg1, rect_vec[0]);
+	lastImg = normalizeImg(comImg2, rect_vec[0]);
 		 
 	//// 测试代码
 	//imshow("comImg1", comImg1);
@@ -75,7 +76,9 @@ Mat jointImg(vector<Mat> img_vec) {
 	RNG rng(getTickCount());
 	int randnum = rng.uniform(0, 1000) % img_vec.size();
 	Mat dstImg = img_vec[randnum];
+	Mat lastImg = dstImg;
 	img_nums.erase(img_nums.find(randnum));
+	cout << randnum << endl;
 	while (!img_nums.empty()) {
 		double maxMatchLen = -1;
 		Mat tgtImg;
@@ -84,7 +87,7 @@ Mat jointImg(vector<Mat> img_vec) {
 		for (auto num : img_nums) {
 			vector<pair<Point, Point>> pot_tmp;
 			Mat img = img_vec[num];
-			double matchLen = isJoint(pot_tmp, dstImg, img);
+			double matchLen = isJoint(pot_tmp, lastImg, img);
 			if (matchLen > maxMatchLen) {
 				maxMatchLen = matchLen;
 				tgtImg = img;
@@ -92,9 +95,14 @@ Mat jointImg(vector<Mat> img_vec) {
 				pot_vec = pot_tmp;
 			}
 		}
-		if (maxMatchLen <= 0) return Mat();
+		if (maxMatchLen <= 0) {
+			cout << "end" << endl;
+			return Mat();
+		}
 		img_nums.erase(img_nums.find(tgtnum));
-		dstImg = jointTwo(pot_vec, dstImg, tgtImg);
+		cout << tgtnum << endl;
+		dstImg = jointTwo(pot_vec, lastImg, dstImg, tgtImg);
+		imshow("lastImg", lastImg);
 	}
 	return dstImg;
 }

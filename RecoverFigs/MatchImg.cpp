@@ -9,8 +9,9 @@
 // matchNum:		匹配的点坐标数
 // matchLen:		匹配轮廓线的总长度
 //  返回值:			多组匹配的点坐标 (这里为二组，即第一组匹配的点坐标和最后一组匹配的点坐标， 后期可根据需要改动)
-vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & matchTheta, const vector<Point> & contour1,
-						const vector<Point> & contour2, double thresholdLen, double thresholdDir, double thresholdAveDir)
+vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & matchTheta, double & matchPixDiff,
+						Mat srcImg1, Mat srcImg2, const vector<Point> & contour1,const vector<Point> & contour2, 
+						double thresholdLen, double thresholdDir, double thresholdAveDir, double thresholdAvePixDiff)
 {
 	int size1 = (int)contour1.size();
 	int size2 = (int)contour2.size();
@@ -51,6 +52,7 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 	// 然后根据 lens 和 thetas 来匹配
 	double maxMatchLen = 0; // 最长匹配长度
 	double minAveTh = 1e10;  // 最小的平均匹配角度
+	double minAvePixDiff = 1e10;  // 最小平均像素差
 	int maxMatchNum = 0;  // 最大的匹配点数
 	int maxBegin1 = 0, maxBegin2 = 0; // 匹配的初始下标
 	// 三重循环暴力法遍历
@@ -59,17 +61,22 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 			int num = 0;
 			double lenNow = 0;
 			double aveTh = 0;
+			double avePixDiff = 0;
 			for (int k = 0; k < minsize; k++) {
 				double del_th = fabs(thetas1[(i + k) % size1] - thetas2[(j - k + size2) % size2]);
 				del_th = min(del_th, 360 - del_th);
 				double l1_1 = lens1[(i + k) % size1], l1_2 = lens2[(j - k + size2) % size2];
 				double l2_1 = lens1[(i + k + 1) % size1], l2_2 = lens2[(j - k - 1 + size2) % size2];
+				Point pot1 = contour1[(i + k) % size1], pot2 = contour2[(j - k + size2) % size2];
+				int range = 3;
+				int pix1 = minMatElemnet(srcImg1, pot1, range), pix2 = minMatElemnet(srcImg2, pot2, range);
 				// 匹配的基本条件
 				if (fabs(l1_1 - l1_2) / (l1_1 + l1_2) <= thresholdLen / 2 &&
 					fabs(l2_1 - l2_2) / (l2_1 + l2_2) <= thresholdLen / 2 && del_th <= thresholdDir) {
 					num++;
 					lenNow += (l1_1 + l1_2 + l2_1 + l2_2) / 4;
 					aveTh += del_th;
+					avePixDiff += fabs(pix1 - pix2);
 				}
 				else {
 					break;
@@ -77,11 +84,13 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 			}
 			if (num > 1) {
 				aveTh /= num;
-				//  匹配的优化目标， 这里为匹配长度尽可能长，同时平均匹配角度小于某个阈值
-				if (lenNow > maxMatchLen && aveTh < thresholdAveDir) {
+				avePixDiff /= num;
+				//  匹配的优化目标， 这里为匹配长度尽可能长，同时平均匹配角度小于某个阈值, 并且平均匹配像素差小于某个阈值
+				if (lenNow > maxMatchLen && aveTh < thresholdAveDir && avePixDiff < thresholdAvePixDiff) {
 					maxMatchNum = num;
 					maxMatchLen = lenNow;
 					minAveTh = aveTh;
+					minAvePixDiff = avePixDiff;
 					maxBegin1 = i;
 					maxBegin2 = (j - num + 1 + size2) % size2;
 				}
@@ -92,6 +101,7 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 	matchNum = maxMatchNum;
 	matchLen = maxMatchLen;
 	matchTheta = minAveTh;
+	matchPixDiff = minAvePixDiff;
 	vector<pair<Point, Point>> pot_vec;
 	if (maxMatchNum > 1) {
 		pot_vec.resize(2);
@@ -123,6 +133,7 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 	return pot_vec;
 }
 
+
 // srcImg1, srcImg2 为带匹配的原图， 必须是一通道的，即灰度图
 // pot_vec 为成功匹配后的多组匹配点坐标
 // 若可以匹配，则放回true, 否则， false
@@ -135,10 +146,16 @@ double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2,
 	vector<Point> curve1, curve2;
 	extractContours(binImg1, contours1);
 	extractContours(binImg2, contours2);
+	//Mat blurImg1, blurImg2;
+	//Size ksize(1, 1);
+	//double sigma = 0.001;
+	//GaussianBlur(srcImg1, blurImg1, ksize, sigma, sigma);
+	//GaussianBlur(srcImg2, blurImg2, ksize, sigma, sigma);
 	// 计算轮廓的总长度，这里只取第一个轮廓
 	int maxMatchNum = 0;
 	double maxMatchLen = 0;
 	double minMatchTheta = 360;
+	double minMatchPixDiff = 255;
 	// 对可能的 epsilong 进行穷举，找到最好的那个匹配的情况
 	for (auto epsilon : epsilon_vec) {
 		approxPoly(curves1, contours1, epsilon);
@@ -146,12 +163,15 @@ double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2,
 		int matchNum = 0;
 		double matchLen = 0;
 		double matchTheta = 360;
+		double matchPixDiff = 255;
 		// 这里总假定 curves 里面只有一组轮廓坐标，这个后期根据需要可以改动
-		vector<pair<Point, Point>> temp_vec = matchTwo(matchNum, matchLen, matchTheta, curves1[0], curves2[0]);
-		if (matchNum > maxMatchNum || (matchNum == maxMatchNum && matchTheta <= minMatchTheta)) {
+		vector<pair<Point, Point>> temp_vec;
+		temp_vec = matchTwo(matchNum, matchLen, matchTheta, matchPixDiff, srcImg1, srcImg2, curves1[0], curves2[0]);
+		if (matchNum > maxMatchNum || (matchNum == maxMatchNum && matchLen > maxMatchLen)) {
 			maxMatchNum = matchNum;
 			maxMatchLen = matchLen;
 			minMatchTheta = matchTheta;
+			minMatchPixDiff = matchPixDiff;
 			pot_vec = temp_vec;
 			// 更新最大值以及 pot_vec
 			curve1 = curves1[0];  // test !
@@ -188,6 +208,7 @@ double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2,
 		//cout << "maxMatchNum: " << maxMatchNum << endl;
 		//cout << "maxMatchLen: " << maxMatchLen << endl;
 		//cout << "minMatchTheta: " << minMatchTheta << endl;
+		//cout << "minMatchAvePixDiff: " << minMatchPixDiff << endl;
 
 		//// 不满足给定的条件，则不能匹配
 		if (maxMatchLen / tolLen <= thresholdTolLen) {
