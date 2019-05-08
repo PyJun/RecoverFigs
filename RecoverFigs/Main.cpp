@@ -4,7 +4,7 @@ Matcher matchers[SIZE][SIZE];
 
 
 int main(int argc, const char * argv) {
-	vector<Mat> img_vec = getImgVec(getNums(4));
+	vector<Mat> img_vec = getImgVec(getNums(9));
 	Mat recImg;
 	if (recoverImg(recImg, img_vec)) { 
 		imshow("recoverImg", recImg);

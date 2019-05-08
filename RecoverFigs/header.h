@@ -14,8 +14,8 @@
 using namespace std;
 using namespace cv;
 
-const string DIR = "D:/codespace/python/人工智能/深度学习/碎片匹配/data/";
-//const string DIR = "./data/";
+//const string DIR = "D:/codespace/python/人工智能/深度学习/碎片匹配/data/";
+const string DIR = "./data/";
 const double PI = 3.1415926;
 
 // 一些超参， 可以通过调节这些参数来优化匹配拼接的效果
