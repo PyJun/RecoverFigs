@@ -34,3 +34,24 @@ Mat normalizeImg(Mat srcImg, Rect rect) {
 	tgtImg.copyTo(dstImg(Range(interval_y, interval_y + rect.height), Range(interval_x, interval_x + rect.width)));
 	return dstImg;
 }
+
+Mat normalizeImg(Mat srcImg, Rect rect, const set<int> & jointedIds, int size) {
+	double width = rect.width, height = rect.height;
+	double length = sqrt(width * width + height * height);
+	int interval_x = (int)ceil((length - width + 32) / 2);
+	int interval_y = (int)ceil((length - height + 32) / 2);
+	Mat dstImg(rect.height + 2 * interval_y, rect.width + 2 * interval_x, srcImg.type(), Scalar::all(255));
+	Mat tgtImg = srcImg(rect);
+	tgtImg.copyTo(dstImg(Range(interval_y, interval_y + rect.height), Range(interval_x, interval_x + rect.width)));
+	double mv_x = rect.x + (rect.width - dstImg.cols) / 2;
+	double mv_y = rect.y + (rect.height - dstImg.cols) / 2;
+	for (auto id1 : jointedIds) {
+		for (int id2 = 0; id2 < size; id2++) {
+			if (id1 == id2) continue;
+			movePoint(-mv_x, -mv_y, matchers[id1][id2].first_p);
+			movePoint(-mv_x, -mv_y, matchers[id1][id2].last_p);
+		}
+	}
+	return dstImg;
+}
+

@@ -36,6 +36,12 @@
     <ClCompile Include="DetectTarget.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ImgPrime.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="InitImg.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="header.h">
