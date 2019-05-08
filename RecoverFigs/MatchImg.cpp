@@ -11,7 +11,7 @@
 //  返回值:			多组匹配的点坐标 (这里为二组，即第一组匹配的点坐标和最后一组匹配的点坐标， 后期可根据需要改动)
 vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & matchTheta, double & matchPixDiff,
 						Mat srcImg1, Mat srcImg2, const vector<Point> & contour1,const vector<Point> & contour2, 
-						double thresholdLen, double thresholdDir, double thresholdAveDir, double thresholdAvePixDiff)
+						double thresholdLen, double thresholdDir, double thresholdAveDir, double thresholdAvePixDiff, int range)
 {
 	int size1 = (int)contour1.size();
 	int size2 = (int)contour2.size();
@@ -68,7 +68,6 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 				double l1_1 = lens1[(i + k) % size1], l1_2 = lens2[(j - k + size2) % size2];
 				double l2_1 = lens1[(i + k + 1) % size1], l2_2 = lens2[(j - k - 1 + size2) % size2];
 				Point pot1 = contour1[(i + k) % size1], pot2 = contour2[(j - k + size2) % size2];
-				int range = 3;
 				int pix1 = minMatElemnet(srcImg1, pot1, range), pix2 = minMatElemnet(srcImg2, pot2, range);
 				// 匹配的基本条件
 				if (fabs(l1_1 - l1_2) / (l1_1 + l1_2) <= thresholdLen / 2 &&
@@ -218,4 +217,3 @@ double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2,
 	}
 	return -1;
 }
-
