@@ -1,12 +1,16 @@
 #include "header.h"
 
 Matcher matchers[SIZE][SIZE];
-
+vector<vector<vector<Point>>> contours_vec;
 
 int main(int argc, const char * argv) {
-	vector<Mat> img_vec = getImgVec(getNums(9));
+	double t1 = (double)getTickCount();
+	vector<Mat> img_vec = getImgVec(getNums(16));
 	Mat recImg;
 	if (recoverImg(recImg, img_vec)) { 
+		resize(recImg, recImg, Size(600, 600));
+		double t2 = (double)getTickCount();
+		cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
 		imshow("recoverImg", recImg);
 		waitKey(0);
 		imwrite(DIR + string("recoverImg.jpg"), recImg);
@@ -16,6 +20,16 @@ int main(int argc, const char * argv) {
 	}
 	return 0;
 }
+
+
+
+
+
+
+
+
+
+
 
 
 //int main() {
@@ -50,54 +64,3 @@ int main(int argc, const char * argv) {
 //	return 0;
 //}
 
-
-
-//// 这是二图拼接的主函数
-//int main(int argc, const char * argv) {
-//	string img_path1 = getImgPath(2);
-//	string img_path2 = getImgPath(1);
-//	//string img_path2 = "data/qipa.png";
-//	Mat srcImg1 = imread(img_path1, IMREAD_COLOR);
-//	Mat srcImg2 = imread(img_path2, IMREAD_COLOR);
-//	if (srcImg1.empty() || srcImg2.empty()) {
-//		cerr << "无法读取原图像" << endl;
-//		system("pause");
-//	}
-//	else {
-//		vector<pair<Point, Point>> pot_vec;
-//		double match = isJoint(pot_vec, srcImg1, srcImg2);
-//		cout << match << endl;
-//		if (match > 0) { 
-//			Mat lastImg;
-//			Mat mergedImg = jointTwo(pot_vec, lastImg, srcImg1, srcImg2);
-//			imshow(img_path1, srcImg1);
-//			imshow(img_path2, srcImg2);
-//			imshow("Merged Img", mergedImg);
-//			waitKey(0);
-//		}
-//		else {
-//			cout << "无法拼接！" << endl;
-//			system("pause");
-//		}
-//	}
-//	return 0;
-//}
-
-
-//// 这个多图拼接的主函数
-//int main(int argc, const char * argv) {
-//	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-//	Mat mergedImg = jointImg(img_vec);
-//	if (!mergedImg.empty()) {
-//		resize(mergedImg, mergedImg, Size(600, 600));
-//		imshow("Merged Img", mergedImg);
-//		waitKey(0);
-//	} else {
-//		cout << "无法拼接！" << endl;
-//		waitKey(0);
-//		system("pause");
-//	}
-//	return 0;
-//}
-//
-//

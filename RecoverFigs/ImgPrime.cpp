@@ -37,13 +37,14 @@ double imgPrime(vector<pair<int,int>> & pair_nums, int size, int start) {
 
 
 // ¸´Ô­Í¼Ïñ
-bool recoverImg(Mat & dstImg, const vector<Mat> img_vec) {
+bool recoverImg(Mat & dstImg, const vector<Mat> & img_vec) {
 	int size = (int)img_vec.size();
 	initMatchers(img_vec);
 	vector<pair<int, int>> pair_nums;
 	double tolMatch = imgPrime(pair_nums, size);
 	if (tolMatch <= 0) return false;
 	dstImg = jointImg(img_vec, pair_nums);
+	if (dstImg.empty()) return false;
 	return true;
 }
 

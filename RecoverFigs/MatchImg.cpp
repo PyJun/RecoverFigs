@@ -10,7 +10,7 @@
 // matchLen:		匹配轮廓线的总长度
 //  返回值:			多组匹配的点坐标 (这里为二组，即第一组匹配的点坐标和最后一组匹配的点坐标， 后期可根据需要改动)
 vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & matchTheta, double & matchPixDiff,
-						Mat srcImg1, Mat srcImg2, const vector<Point> & contour1,const vector<Point> & contour2, 
+						const Mat & srcImg1, const Mat & srcImg2, const vector<Point> & contour1,const vector<Point> & contour2, 
 						double thresholdLen, double thresholdDir, double thresholdAveDir, double thresholdAvePixDiff, int range)
 {
 	int size1 = (int)contour1.size();
@@ -104,20 +104,6 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 	vector<pair<Point, Point>> pot_vec;
 	if (maxMatchNum > 1) {
 		pot_vec.resize(2);
-		//// 分别表示第一对匹配的点和最后一对匹配的点
-		//Point first_p1, last_p1, first_p2, last_p2; 
-		//if (maxMatchNum > 1) {
-		//	first_p1 = contour1[maxBegin1];
-		//	last_p1 = contour1[(maxBegin1 + maxMatchNum - 1) % size1];
-		//	first_p2 = contour2[(maxBegin2 + maxMatchNum - 1) % size2];
-		//	last_p2 = contour2[maxBegin2];
-		//}
-		//else {
-		//	first_p1 = contour1[(maxBegin1 - 1 + size1) % size1];
-		//	last_p1 = contour1[(maxBegin1 + maxMatchNum) % size1];
-		//	first_p2 = contour2[(maxBegin2 + maxMatchNum) % size2];
-		//	last_p2 = contour2[(maxBegin2 - 1 + size2) % size2];
-		//}
 		Point first_p1, last_p1, first_p2, last_p2; 
 		first_p1 = contour1[maxBegin1];
 		last_p1 = contour1[(maxBegin1 + maxMatchNum - 1) % size1];
@@ -137,20 +123,16 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 // pot_vec 为成功匹配后的多组匹配点坐标
 // 若可以匹配，则放回true, 否则， false
 // 封装该函数的目的是为了让 多边形拟合的 epsilong 参数可以自适应， 取得最佳匹配的那个参数
-double matchImg(vector<pair<Point, Point>> & pot_vec, Mat srcImg1, Mat srcImg2, 
-				const vector<double> & epsilon_vec, double thresholdTolLen) {
-	Mat binImg1 = preSolveImg(srcImg1);
-	Mat binImg2 = preSolveImg(srcImg2);
-	vector<vector<Point>> contours1, contours2, curves1, curves2;
+double matchImg(vector<pair<Point, Point>> & pot_vec, vector<vector<Point>> & contours1, vector<vector<Point>> & contours2, 
+				const Mat & srcImg1, const Mat & srcImg2, const vector<double> & epsilon_vec, double thresholdTolLen) {
+	//Mat binImg1 = preSolveImg(srcImg1);
+	//Mat binImg2 = preSolveImg(srcImg2);
+	//vector<vector<Point>> contours1, contours2, curves1, curves2;
+	//vector<Point> curve1, curve2;
+	//extractContours(binImg1, contours1);
+	//extractContours(binImg2, contours2);
+	vector<vector<Point>> curves1, curves2;
 	vector<Point> curve1, curve2;
-	extractContours(binImg1, contours1);
-	extractContours(binImg2, contours2);
-	//Mat blurImg1, blurImg2;
-	//Size ksize(1, 1);
-	//double sigma = 0.001;
-	//GaussianBlur(srcImg1, blurImg1, ksize, sigma, sigma);
-	//GaussianBlur(srcImg2, blurImg2, ksize, sigma, sigma);
-	// 计算轮廓的总长度，这里只取第一个轮廓
 	int maxMatchNum = 0;
 	double maxMatchLen = 0;
 	double minMatchTheta = 360;

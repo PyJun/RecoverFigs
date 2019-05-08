@@ -20,12 +20,14 @@ double lineDirection(const Point & a, const Point & b)
 }
 
 // 计算给定范围内灰度图中的最大的一个像素
-int minMatElemnet(Mat srcImg, Point pot, int range) {
+int minMatElemnet(const Mat & srcImg, Point pot, int range) {
 	Mat dstImg = srcImg(Rect(pot.x - range, pot.y - range, 2*range+1, 2*range+1));
 	int maxElem = 255;
-	MatIterator_<uchar> grayit;
-	for (grayit = dstImg.begin<uchar>(); grayit != dstImg.end<uchar>(); grayit++) {
-		maxElem = min(maxElem, (int)*grayit);
+	for (int i = 0; i < dstImg.rows; i++) {
+		uchar * row_p = dstImg.ptr<uchar>(i);
+		for (int j = 0; j < dstImg.cols; j++) {
+			maxElem = min(maxElem, (int)row_p[j]);
+		}
 	}
 	return maxElem;
 }

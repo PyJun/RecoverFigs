@@ -12,7 +12,7 @@ vector<int> getNums(int n) {
 	return nums;
 }
 
-vector<Mat> getImgVec(const vector<int> nums) {
+vector<Mat> getImgVec(const vector<int> & nums) {
 	vector<Mat> img_vec;
 	for (auto num : nums) {
 		string img_path = getImgPath(num);
@@ -24,17 +24,41 @@ vector<Mat> getImgVec(const vector<int> nums) {
 	return img_vec;
 }
 
+vector<Mat> getGrayimgVec(const vector<Mat> & img_vec) {
+	vector<Mat> grayImg_vec;
+	for (auto img : img_vec) {
+		Mat grayImg;
+		cvtColor(img, grayImg, COLOR_BGR2GRAY);
+		grayImg_vec.push_back(grayImg);
+	}
+	return grayImg_vec;
+}
+
+void initContoursVec(const vector<Mat> & grayImg_vec) {
+	contours_vec.clear();
+	for (auto grayImg : grayImg_vec) {
+		Mat binImg = preSolveImg(grayImg);
+		vector<vector<Point>> contours;
+		extractContours(binImg, contours);
+		contours_vec.push_back(contours);
+	}
+}
+
 void initMatchers(const vector<Mat> & img_vec) {
-	int size = (int)img_vec.size();
+	vector<Mat> grayImg_vec = getGrayimgVec(img_vec);
+	initContoursVec(grayImg_vec);
+	int size = (int)grayImg_vec.size();
 	vector<pair<Point, Point>> pot_vec;
 	Point first_p1, last_p1, first_p2, last_p2;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < i && j < size; j++) {
-			double match = isJoint(pot_vec, img_vec[i], img_vec[j]);
-			first_p1 = pot_vec[0].first;
-			last_p1 = pot_vec[1].first;
-			first_p2 = pot_vec[0].second;
-			last_p2 = pot_vec[1].second;
+			double match = matchImg(pot_vec, contours_vec[i], contours_vec[j], grayImg_vec[i], grayImg_vec[j]);
+			if (match > 0) {
+				first_p1 = pot_vec[0].first;
+				last_p1 = pot_vec[1].first;
+				first_p2 = pot_vec[0].second;
+				last_p2 = pot_vec[1].second;
+			}
 			matchers[i][j] = Matcher(first_p1, last_p1, match);
 			matchers[j][i] = Matcher(first_p2, last_p2, match);
 		}

@@ -2,9 +2,8 @@
 
 // 对图像进行处理， 包括高斯滤波， canny算子， 形态学闭运算
 // 最终得到黑白图像，白色为前景，黑色为背景
-Mat preSolveImg(Mat srcImg, double c1, double c2, int ksize) {
+Mat preSolveImg(const Mat & srcImg, double c1, double c2, int ksize) {
 	Mat tempImg = srcImg.clone(), edges;
-	//cvtColor(tempImg, tempImg, COLOR_BGR2GRAY);
 	GaussianBlur(tempImg, tempImg, Size(3, 3), 0.1, 0.1);
 	Canny(tempImg, edges, c1, c2, 5);
 	//imshow("Canny", edges);
@@ -22,7 +21,7 @@ Mat preSolveImg(Mat srcImg, double c1, double c2, int ksize) {
 }
 
 // 对黑白的轮廓图提取轮廓坐标
-void extractContours(Mat srcImg, vector<vector<Point>> & contours) {
+void extractContours(const Mat & srcImg, vector<vector<Point>> & contours) {
 	contours.clear();
 	vector<Vec4i> hierarchy;
 	findContours(srcImg, contours, hierarchy, RETR_CCOMP, CHAIN_APPROX_SIMPLE, Point(0,0));
