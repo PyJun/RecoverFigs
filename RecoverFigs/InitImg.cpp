@@ -1,7 +1,7 @@
 #include "header.h"
 
-inline string getImgPath(int i) {
-	return DIR + to_string(i) + string(".png");
+inline string getImgPath(int i, const string dir) {
+	return dir + to_string(i) + string(".png");
 }
 
 vector<int> getNums(int n) {
@@ -12,10 +12,10 @@ vector<int> getNums(int n) {
 	return nums;
 }
 
-vector<Mat> getImgVec(const vector<int> & nums) {
+vector<Mat> getImgVec(const vector<int> & nums, const string dir) {
 	vector<Mat> img_vec;
 	for (auto num : nums) {
-		string img_path = getImgPath(num);
+		string img_path = getImgPath(num, dir);
 		Mat srcImg = imread(img_path, IMREAD_COLOR);
 		if (!srcImg.empty()) {
 			img_vec.push_back(srcImg);

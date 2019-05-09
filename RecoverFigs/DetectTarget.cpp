@@ -24,11 +24,14 @@ vector<Rect> detectTarget(Mat srcImg) {
 }
 
 // 通过一个目标边界的矩形来规范化原图像
-Mat normalizeImg(Mat srcImg, Rect rect) {
+Mat normalizeImg(Mat srcImg, double rate) {
+	if (srcImg.empty()) return Mat();
+	vector<Rect> rect_vec = detectTarget(srcImg);
+	if (rect_vec.empty()) return Mat();
+	Rect rect = rect_vec[0];
 	double width = rect.width, height = rect.height;
-	double length = sqrt(width * width + height * height);
-	int interval_x = (int)ceil((length - width + 32) / 2);
-	int interval_y = (int)ceil((length - height + 32) / 2);
+	int interval_x = (int)ceil((width * rate - width) / 2);
+	int interval_y = (int)ceil((height * rate - height) / 2);
 	Mat dstImg(rect.height + 2 * interval_y, rect.width + 2 * interval_x, srcImg.type(), Scalar::all(255));
 	Mat tgtImg = srcImg(rect);
 	tgtImg.copyTo(dstImg(Range(interval_y, interval_y + rect.height), Range(interval_x, interval_x + rect.width)));

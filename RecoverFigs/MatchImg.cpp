@@ -125,12 +125,6 @@ vector<pair<Point, Point>> matchTwo(int & matchNum, double & matchLen, double & 
 // 封装该函数的目的是为了让 多边形拟合的 epsilong 参数可以自适应， 取得最佳匹配的那个参数
 double matchImg(vector<pair<Point, Point>> & pot_vec, vector<vector<Point>> & contours1, vector<vector<Point>> & contours2, 
 				const Mat & srcImg1, const Mat & srcImg2, const vector<double> & epsilon_vec, double thresholdTolLen) {
-	//Mat binImg1 = preSolveImg(srcImg1);
-	//Mat binImg2 = preSolveImg(srcImg2);
-	//vector<vector<Point>> contours1, contours2, curves1, curves2;
-	//vector<Point> curve1, curve2;
-	//extractContours(binImg1, contours1);
-	//extractContours(binImg2, contours2);
 	vector<vector<Point>> curves1, curves2;
 	vector<Point> curve1, curve2;
 	int maxMatchNum = 0;

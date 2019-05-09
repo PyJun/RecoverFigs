@@ -3,25 +3,26 @@
 Matcher matchers[SIZE][SIZE];
 vector<vector<vector<Point>>> contours_vec;
 
-int main(int argc, const char * argv) {
+int main(int argc, const char * argv[]) {
 	double t1 = (double)getTickCount();
-	vector<Mat> img_vec = getImgVec(getNums(16));
+	const string dir = (argc > 1) ? argv[1] : DIR;
+	vector<Mat> img_vec = getImgVec(getNums(9), dir);
 	Mat recImg;
 	if (recoverImg(recImg, img_vec)) { 
 		resize(recImg, recImg, Size(600, 600));
 		double t2 = (double)getTickCount();
 		cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
-		imshow("recoverImg", recImg);
-		waitKey(0);
-		imwrite(DIR + string("recoverImg.jpg"), recImg);
+		if (argc <= 1) {
+			imshow("recoverImg", recImg);
+			waitKey(0);
+		}
+		imwrite(dir + string("recoverImg.jpg"), recImg);
+		return 0;
 	} else {
 		cout << "无法拼接!" << endl;
-		system("pause");
+		return -1;
 	}
-	return 0;
 }
-
-
 
 
 
@@ -50,7 +51,7 @@ int main(int argc, const char * argv) {
 
 //
 //// 这是二图拼接的主函数
-//int main(int argc, const char * argv) {
+//int main(int argc, const char * argv[]) {
 //	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
 //	int size = img_vec.size();
 //	initMatchers(img_vec);

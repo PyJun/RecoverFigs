@@ -59,7 +59,7 @@ int minMatElemnet(const Mat & srcImg, Point pot, int range);
 
 // DetectTarget.cpp
 vector<Rect> detectTarget(Mat srcImg);
-Mat normalizeImg(Mat srcImg, Rect rect);
+Mat normalizeImg(Mat srcImg, double rate = 1.128);
 Mat normalizeImg(Mat srcImg, Rect rect, const set<int> & jointedIds, int size);
 
 // MatchImg.cpp
@@ -80,8 +80,8 @@ double imgPrime(vector<pair<int,int>> & nums, int size, int start = 0);
 bool recoverImg(Mat & dstImg, const vector<Mat> & img_vec);
 
 // InitImg.cpp
-inline string getImgPath(int i);
-vector<Mat> getImgVec(const vector<int> & nums);
+inline string getImgPath(int i, const string dir = DIR);
+vector<Mat> getImgVec(const vector<int> & nums, const string dir = DIR);
 void initMatchers(const vector<Mat> & img_vec);
 vector<int> getNums(int n);
 

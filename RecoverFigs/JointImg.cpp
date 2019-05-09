@@ -35,7 +35,7 @@ Mat jointTwo(Mat srcImg1, Mat srcImg2, pair<int,int> pair_id, set<int> & jointed
 	comImg2.copyTo(comImg1, mask);
 	vector<Rect> rect_vec = detectTarget(comImg1);
 	if (rect_vec.empty()) {
-		cerr << "Error: rect_vec empty!" << endl;
+		//cerr << "Error: rect_vec empty!" << endl;
 		return Mat();
 	}
 	// 一般情况下只有一个轮廓
