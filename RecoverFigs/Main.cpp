@@ -7,14 +7,14 @@ vector<vector<vector<Point>>> contours_vec;
 // RecoverFigs.exe inDir outFile
 // inDir 为碎片图像的目录， outFile 为输出图像的路径
 int main(int argc, const char * argv[]) {
-	double t1 = (double)getTickCount();
+	//double t1 = (double)getTickCount();
 	const string dir = ((argc > 1) ? argv[1] : DIR) + "/";
 	vector<Mat> img_vec = getImgVec(getNums(9), dir);
 	Mat recImg;
 	if (recoverImg(recImg, img_vec)) { 
 		resize(recImg, recImg, Size(600, 600));
-		double t2 = (double)getTickCount();
-		cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
+		//double t2 = (double)getTickCount();
+		//cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
 		if (argc <= 1) {
 			imshow("recoverImg", recImg);
 			waitKey(0);
@@ -30,6 +30,9 @@ int main(int argc, const char * argv[]) {
 		return -1;
 	}
 }
+
+
+
 
 
 //int main() {
