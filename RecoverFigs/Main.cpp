@@ -37,18 +37,21 @@ int main() {
 	Mat srcImg = imread(file, IMREAD_COLOR);
 	resize(srcImg, srcImg, Size(800, 600));
 	vector<Rect> rect_vec = detectTarget(srcImg);
+	vector<Mat> img_vec = extractTarget(srcImg, rect_vec);
 	cout << rect_vec.size() << endl;
 	for (auto & rt : rect_vec) {
+		rectangle(srcImg, rt, Scalar(255, 0, 0), 1);
 		cout << rt << endl;
 	}
+	int id = 1;
+	for (auto &img : img_vec) {
+		imwrite("D:/PyJun/Desktop/work/ËéÆ¬¸´Ô­EXEÊ¾Àý/data/" + to_string(id++) + ".png", img);
+	}
+	//imshow("srcImg", srcImg);
 	waitKey(0);
 	//system("pause");
 	return 0;
 }
-
-
-
-
 
 
 

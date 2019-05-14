@@ -43,8 +43,12 @@ bool recoverImg(Mat & dstImg, const vector<Mat> & img_vec) {
 	vector<pair<int, int>> pair_nums;
 	double tolMatch = imgPrime(pair_nums, size);
 	if (tolMatch <= 0) return false;
-	dstImg = normalizeImg(jointImg(img_vec, pair_nums));
+	dstImg = jointImg(img_vec, pair_nums);
 	if (dstImg.empty()) return false;
+	vector<Rect> rect_vec = detectTarget(dstImg);
+	if ((int)rect_vec.size() != 1) return false;
+	dstImg = normalizeImg(dstImg, rect_vec[0]);
 	return true;
 }
+
 

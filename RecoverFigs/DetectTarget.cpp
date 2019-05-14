@@ -1,5 +1,20 @@
 #include "header.h"
 
+// srcImg 为三通道图像；
+vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec) {
+	Mat dstImg(srcImg.size(), srcImg.type(), Scalar::all(255));
+	Mat binImg = preSolveImg(srcImg);
+	srcImg.copyTo(dstImg, binImg);
+	vector<Mat> img_vec;
+	for (auto & rt : rect_vec) {
+		Mat subImg = normalizeImg(dstImg, rt, 2);
+		img_vec.push_back(subImg);
+	}
+	imshow("dstImg", dstImg);
+	return img_vec;
+}
+
+
 // 根据原图像返回一个目标区域的矩形
 vector<Rect> detectTarget(Mat srcImg) {
 	Mat grayImg;
@@ -24,11 +39,11 @@ vector<Rect> detectTarget(Mat srcImg) {
 }
 
 // 通过一个目标边界的矩形来规范化原图像
-Mat normalizeImg(Mat srcImg, double rate) {
-	if (srcImg.empty()) return Mat();
-	vector<Rect> rect_vec = detectTarget(srcImg);
-	if (rect_vec.empty()) return Mat();
-	Rect rect = rect_vec[0];
+Mat normalizeImg(Mat srcImg, Rect rect, double rate) {
+	//if (srcImg.empty()) return Mat();
+	//vector<Rect> rect_vec = detectTarget(srcImg);
+	//if (rect_vec.empty()) return Mat();
+	//Rect rect = rect_vec[0];
 	double width = rect.width, height = rect.height;
 	int interval_x = (int)ceil((width * rate - width) / 2);
 	int interval_y = (int)ceil((height * rate - height) / 2);

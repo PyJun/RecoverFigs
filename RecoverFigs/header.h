@@ -19,7 +19,7 @@ const string DIR = "./data";
 const double PI = 3.1415926;
 
 // 一些超参， 可以通过调节这些参数来优化匹配拼接的效果
-const double Cny1 = 10, Cny2 = 28;  // 原图滤波 canny 函数的第二和第三个参数，
+const double Cny1 = 16, Cny2 = 32;  // 原图滤波 canny 函数的第二和第三个参数，
 const int Ksize = 17;  // 原图预处理，形态学闭运算的 ksize 参数，影响轮廓的有效提取
 const int  MinLen = 100;  // 判断外轮廓的最小阈值
 const double ThresholdLen = 0.4;  // 匹配每条边长度的相对比例阈值
@@ -58,9 +58,11 @@ double lineLength(const Point & a, const Point & b);
 double lineDirection(const Point & a, const Point & b);
 int minMatElemnet(const Mat & srcImg, Point pot, int range);
 
+
 // DetectTarget.cpp
+vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec);
 vector<Rect> detectTarget(Mat srcImg);
-Mat normalizeImg(Mat srcImg, double rate = 1.128);
+Mat normalizeImg(Mat srcImg, Rect rect, double rate = 1.128);
 Mat normalizeImg(Mat srcImg, Rect rect, const set<int> & jointedIds, int size);
 
 // MatchImg.cpp
