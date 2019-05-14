@@ -175,8 +175,8 @@ double matchImg(vector<pair<Point, Point>> & pot_vec, vector<vector<Point>> & co
 		//ellipse(img1, last_p1, Size(7, 11), 0, 0, 360, Scalar(50), 2);
 		//ellipse(img2, first_p2, Size(11, 7), 0, 0, 360, Scalar(50), 2);
 		//ellipse(img2, last_p2, Size(7, 11), 0, 0, 360, Scalar(50), 2);
-		////imshow("srcimg1", srcImg1);
-		////imshow("srcimg2", srcImg2);
+		//imshow("srcimg1", srcImg1);
+		//imshow("srcimg2", srcImg2);
 		//imshow("img1", img1);
 		//imshow("img2", img2);
 		//cout << "tolLen: " << tolLen << endl;

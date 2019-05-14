@@ -26,32 +26,35 @@ vector<vector<vector<Point>>> contours_vec;
 //		}
 //		return 0;
 //	} else {
-//		//cout << "无法拼接!" << endl;
+//		cout << "无法拼接!" << endl;
+//		system("pause");
 //		return -1;
 //	}
 //}
 
 
-int main() {
-	string file = "data/figs3.png";
-	Mat srcImg = imread(file, IMREAD_COLOR);
-	resize(srcImg, srcImg, Size(800, 600));
-	vector<Rect> rect_vec = detectTarget(srcImg);
-	vector<Mat> img_vec = extractTarget(srcImg, rect_vec);
-	cout << rect_vec.size() << endl;
-	for (auto & rt : rect_vec) {
-		rectangle(srcImg, rt, Scalar(255, 0, 0), 1);
-		cout << rt << endl;
-	}
-	int id = 1;
-	for (auto &img : img_vec) {
-		imwrite("D:/PyJun/Desktop/work/碎片复原EXE示例/data/" + to_string(id++) + ".png", img);
-	}
-	//imshow("srcImg", srcImg);
-	waitKey(0);
-	//system("pause");
-	return 0;
-}
+//int main() {
+//	double c1 = 15, c2 = 35;
+//	int ksize = 17;
+//	string file = DIR + "/figs3.png";
+//	Mat srcImg = imread(file, IMREAD_COLOR);
+//	resize(srcImg, srcImg, Size(800, 600));
+//	vector<Rect> rect_vec = detectTarget(srcImg, c1, c2, ksize);
+//	vector<Mat> img_vec = extractTarget(srcImg, rect_vec, c1, c2, ksize);
+//	cout << rect_vec.size() << endl;
+//	for (auto & rt : rect_vec) {
+//		rectangle(srcImg, rt, Scalar(255, 0, 0), 1);
+//		cout << rt << endl;
+//	}
+//	int id = 1;
+//	for (auto &img : img_vec) {
+//		imwrite(DIR + "/" + to_string(id++) + ".png", img);
+//	}
+//	//imshow("srcImg", srcImg);
+//	waitKey(0);
+//	//system("pause");
+//	return 0;
+//}
 
 
 
@@ -75,18 +78,19 @@ int main() {
 
 
 
-//// 这是二图拼接的主函数
-//int main(int argc, const char * argv[]) {
-//	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
-//	int size = img_vec.size();
-//	initMatchers(img_vec);
-//	set<int> jointedIds;
-//	Mat dstImg = img_vec[0];
-//	dstImg = jointTwo(dstImg, img_vec[1], { 0, 1}, jointedIds, size);
-//	dstImg = jointTwo(dstImg, img_vec[2], { 1, 2 }, jointedIds, size);
-//	dstImg = jointTwo(dstImg, img_vec[3], { 0, 3 }, jointedIds, size);
-//	imshow("Merged Img", dstImg);
-//	waitKey(0);
-//	return 0;
-//}
+ //这是二图拼接的主函数
+int main(int argc, const char * argv[]) {
+	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+	int size = img_vec.size();
+	initMatchers(img_vec);
+	set<int> jointedIds;
+	cout << matchers[5][6].match << endl;
+	Mat dstImg = img_vec[5];
+	dstImg = jointTwo(dstImg, img_vec[6], { 5, 6}, jointedIds, size);
+	//dstImg = jointTwo(dstImg, img_vec[2], { 1, 2 }, jointedIds, size);
+	//dstImg = jointTwo(dstImg, img_vec[3], { 0, 3 }, jointedIds, size);
+	imshow("Merged Img", dstImg);
+	waitKey(0);
+	return 0;
+}
 

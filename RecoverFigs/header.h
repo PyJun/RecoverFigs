@@ -19,16 +19,16 @@ const string DIR = "./data";
 const double PI = 3.1415926;
 
 // 一些超参， 可以通过调节这些参数来优化匹配拼接的效果
-const double Cny1 = 16, Cny2 = 32;  // 原图滤波 canny 函数的第二和第三个参数，
-const int Ksize = 17;  // 原图预处理，形态学闭运算的 ksize 参数，影响轮廓的有效提取
+const double Cny1 = 3, Cny2 = 5;  // 原图滤波 canny 函数的第二和第三个参数，
+const int Ksize = 23;  // 原图预处理，形态学闭运算的 ksize 参数，影响轮廓的有效提取
 const int  MinLen = 100;  // 判断外轮廓的最小阈值
-const double ThresholdLen = 0.4;  // 匹配每条边长度的相对比例阈值
-const double ThresholdDir = 12;   // 匹配内角角度的阈值
-const double ThresholdAveDir = 4;  // 匹配所有边平均角度的阈值
+const double ThresholdLen = 0.5;  // 匹配每条边长度的相对比例阈值
+const double ThresholdDir = 36;   // 匹配内角角度的阈值
+const double ThresholdAveDir = 12;  // 匹配所有边平均角度的阈值
 const double ThresholdTolLen = 0.1;  // 匹配所有边长度的相对比例阈值
-const double ThresholdAvePixDiff = 25;  // 匹配点之间的平均像素差
+const double ThresholdAvePixDiff = 40;  // 匹配点之间的平均像素差
 const int Rang = 3;					// 像素匹配的局域大小
-const vector<double> Epsilon_Vec{3, 5, 7};   // 多边形拟合的可选参数 epsilon， 使其自适应
+const vector<double> Epsilon_Vec{3, 5, 7, 9, 11};   // 多边形拟合的可选参数 epsilon， 使其自适应
 
 // 定义一个匹配点的结构体， 包含匹配点和匹配系数
 struct Matcher {
@@ -60,8 +60,8 @@ int minMatElemnet(const Mat & srcImg, Point pot, int range);
 
 
 // DetectTarget.cpp
-vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec);
-vector<Rect> detectTarget(Mat srcImg);
+vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec, double c1 = Cny1, double c2 = Cny2, int ksize = Ksize);
+vector<Rect> detectTarget(Mat srcImg, double c1 = Cny1, double c2 = Cny2, int ksize = Ksize);
 Mat normalizeImg(Mat srcImg, Rect rect, double rate = 1.128);
 Mat normalizeImg(Mat srcImg, Rect rect, const set<int> & jointedIds, int size);
 

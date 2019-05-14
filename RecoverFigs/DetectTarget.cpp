@@ -1,9 +1,9 @@
 #include "header.h"
 
 // srcImg 为三通道图像；
-vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec) {
+vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec, double c1, double c2, int ksize) {
 	Mat dstImg(srcImg.size(), srcImg.type(), Scalar::all(255));
-	Mat binImg = preSolveImg(srcImg);
+	Mat binImg = preSolveImg(srcImg, c1, c2, ksize);
 	srcImg.copyTo(dstImg, binImg);
 	vector<Mat> img_vec;
 	for (auto & rt : rect_vec) {
@@ -16,11 +16,12 @@ vector<Mat> extractTarget(Mat srcImg, const vector<Rect> & rect_vec) {
 
 
 // 根据原图像返回一个目标区域的矩形
-vector<Rect> detectTarget(Mat srcImg) {
-	Mat grayImg;
-	cvtColor(srcImg, grayImg, COLOR_BGR2GRAY);
+vector<Rect> detectTarget(Mat srcImg, double c1, double c2, int ksize) {
+	//Mat grayImg;
+	//cvtColor(srcImg, grayImg, COLOR_BGR2GRAY);
 	vector<Rect> rect_vec;
-	Mat binImg = preSolveImg(grayImg);
+	Mat binImg = preSolveImg(srcImg, c1, c2, ksize);
+	cvtColor(binImg, binImg, COLOR_BGR2GRAY);
 	vector<vector<Point>> contours, curves;
 	extractContours(binImg, contours);
 	approxPoly(curves, contours, 1.0);
