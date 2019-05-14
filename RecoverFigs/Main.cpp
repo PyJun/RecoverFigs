@@ -3,33 +3,53 @@
 Matcher matchers[SIZE][SIZE];
 vector<vector<vector<Point>>> contours_vec;
 
-// 命令行调用的格式: 
-// RecoverFigs.exe inDir outFile
-// inDir 为碎片图像的目录， outFile 为输出图像的路径
-int main(int argc, const char * argv[]) {
-	//double t1 = (double)getTickCount();
-	const string dir = ((argc > 1) ? argv[1] : DIR) + "/";
-	vector<Mat> img_vec = getImgVec(getNums(9), dir);
-	Mat recImg;
-	if (recoverImg(recImg, img_vec)) { 
-		resize(recImg, recImg, Size(600, 600));
-		//double t2 = (double)getTickCount();
-		//cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
-		if (argc <= 1) {
-			imshow("recoverImg", recImg);
-			waitKey(0);
-		}
-		if (argc > 2) {
-			imwrite(string(argv[2]), recImg);
-		} else {
-			imwrite(dir + string("recoverImg.jpg"), recImg);
-		}
-		return 0;
-	} else {
-		//cout << "无法拼接!" << endl;
-		return -1;
+//// 命令行调用的格式: 
+//// RecoverFigs.exe inDir outFile
+//// inDir 为碎片图像的目录， outFile 为输出图像的路径
+//int main(int argc, const char * argv[]) {
+//	//double t1 = (double)getTickCount();
+//	const string dir = ((argc > 1) ? argv[1] : DIR) + "/";
+//	vector<Mat> img_vec = getImgVec(getNums(9), dir);
+//	Mat recImg;
+//	if (recoverImg(recImg, img_vec)) { 
+//		resize(recImg, recImg, Size(600, 600));
+//		//double t2 = (double)getTickCount();
+//		//cout << "耗时: " << (t2 - t1) / (getTickFrequency()) << " 秒" << endl;
+//		if (argc <= 1) {
+//			imshow("recoverImg", recImg);
+//			waitKey(0);
+//		}
+//		if (argc > 2) {
+//			imwrite(string(argv[2]), recImg);
+//		} else {
+//			imwrite(dir + string("recoverImg.jpg"), recImg);
+//		}
+//		return 0;
+//	} else {
+//		//cout << "无法拼接!" << endl;
+//		return -1;
+//	}
+//}
+
+
+int main() {
+	string file = "data/figs3.png";
+	Mat srcImg = imread(file, IMREAD_COLOR);
+	resize(srcImg, srcImg, Size(800, 600));
+	vector<Rect> rect_vec = detectTarget(srcImg);
+	cout << rect_vec.size() << endl;
+	for (auto & rt : rect_vec) {
+		cout << rt << endl;
 	}
+	waitKey(0);
+	//system("pause");
+	return 0;
 }
+
+
+
+
+
 
 
 

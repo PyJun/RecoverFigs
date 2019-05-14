@@ -97,5 +97,11 @@
     <Image Include="data\9.png">
       <Filter>资源文件</Filter>
     </Image>
+    <Image Include="data\figs.png">
+      <Filter>资源文件</Filter>
+    </Image>
+    <Image Include="data\figs1.png">
+      <Filter>资源文件</Filter>
+    </Image>
   </ItemGroup>
 </Project>
