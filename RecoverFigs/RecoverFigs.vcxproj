@@ -156,6 +156,10 @@
     <Image Include="data\cat6.jpg" />
     <Image Include="data\figs.png" />
     <Image Include="data\figs1.png" />
+    <Image Include="data\figs2.png" />
+    <Image Include="data\figs3.png" />
+    <Image Include="data\figs4.jpg" />
+    <Image Include="data\figs5.jpg" />
     <Image Include="data\lena.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

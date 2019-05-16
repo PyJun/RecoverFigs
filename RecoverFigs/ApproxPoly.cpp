@@ -12,9 +12,9 @@ Mat preSolveImg(const Mat & srcImg, double c1, double c2, int ksize) {
 	white.copyTo(tempImg, edges);
 	Mat element1 = getStructuringElement(MORPH_ELLIPSE, Size(ksize, ksize));
 	morphologyEx(tempImg, tempImg, MORPH_CLOSE, element1);
-	//Mat element2 = getStructuringElement(MORPH_ELLIPSE, Size(5, 5));
+	//Mat element2 = getStructuringElement(MORPH_ELLIPSE, Size(7, 7));
 	//morphologyEx(tempImg, tempImg, MORPH_OPEN, element2);
-	//threshold(tempImg, tempImg, 150, 255, THRESH_BINARY_INV);
+	//threshold(tempImg, tempImg, 160, 255, THRESH_BINARY_INV);
 	Mat dstImg = tempImg;
 	//vector<Vec4i> hierarchy;
 	//vector<vector<Point>> contours;

@@ -3,7 +3,8 @@
 Matcher matchers[SIZE][SIZE];
 vector<vector<vector<Point>>> contours_vec;
 
-//// 命令行调用的格式: 
+
+////命令行调用的格式: 
 //// RecoverFigs.exe inDir outFile
 //// inDir 为碎片图像的目录， outFile 为输出图像的路径
 //int main(int argc, const char * argv[]) {
@@ -34,9 +35,9 @@ vector<vector<vector<Point>>> contours_vec;
 
 
 //int main() {
-//	double c1 = 15, c2 = 35;
-//	int ksize = 17;
-//	string file = DIR + "/figs3.png";
+//	double c1 = 12, c2 = 36;
+//	int ksize = 21;
+//	string file = DIR + "/figs0.png";
 //	Mat srcImg = imread(file, IMREAD_COLOR);
 //	resize(srcImg, srcImg, Size(800, 600));
 //	vector<Rect> rect_vec = detectTarget(srcImg, c1, c2, ksize);
@@ -50,13 +51,11 @@ vector<vector<vector<Point>>> contours_vec;
 //	for (auto &img : img_vec) {
 //		imwrite(DIR + "/" + to_string(id++) + ".png", img);
 //	}
-//	//imshow("srcImg", srcImg);
+//	imshow("srcImg", srcImg);
 //	waitKey(0);
 //	//system("pause");
 //	return 0;
 //}
-
-
 
 
 
@@ -77,20 +76,47 @@ vector<vector<vector<Point>>> contours_vec;
 //}
 
 
+////这是二图拼接的主函数
+//int main(int argc, const char * argv[]) {
+//	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+//	int size = img_vec.size();
+//	initMatchers(img_vec);
+//	set<int> jointedIds;
+//	int id1 = 2, id2 = 4, id3 = 7;
+//	cout << matchers[id1][id2].match << endl;
+//	Mat dstImg = img_vec[id1];
+//	dstImg = jointTwo(dstImg, img_vec[id2], { id1, id2}, jointedIds, size);
+//	//dstImg = jointTwo(dstImg, img_vec[id3], { id2, id3 }, jointedIds, size);
+//	//dstImg = jointTwo(dstImg, img_vec[3], { 0, 3 }, jointedIds, size);
+//	imshow("Merged Img", dstImg);
+//	waitKey(0);
+//	return 0;
+//}
 
- //这是二图拼接的主函数
+
+//这是多图拼接的主函数
 int main(int argc, const char * argv[]) {
-	vector<Mat> img_vec = getImgVec({ 1, 2, 3, 4, 5, 6, 7, 8, 9 });
+	vector<Mat> img_vec = getImgVec({ 1, 2, 8, 9, 6, 7, 5, 3, 4});
 	int size = img_vec.size();
 	initMatchers(img_vec);
 	set<int> jointedIds;
-	cout << matchers[5][6].match << endl;
-	Mat dstImg = img_vec[5];
-	dstImg = jointTwo(dstImg, img_vec[6], { 5, 6}, jointedIds, size);
+	Mat dstImg = img_vec[0];
+	for (int i = 1; i < 6; i++) {
+		dstImg = jointTwo(dstImg, img_vec[i], { i - 1, i }, jointedIds, size);
+	}
+	//dstImg = jointTwo(dstImg, img_vec[1], { 0, 1 }, jointedIds, size);
 	//dstImg = jointTwo(dstImg, img_vec[2], { 1, 2 }, jointedIds, size);
-	//dstImg = jointTwo(dstImg, img_vec[3], { 0, 3 }, jointedIds, size);
+	//dstImg = jointTwo(dstImg, img_vec[3], { 2, 3 }, jointedIds, size);
+	//dstImg = jointTwo(dstImg, img_vec[4], { 3, 4 }, jointedIds, size);
+	//dstImg = jointTwo(dstImg, img_vec[5], { 4, 5 }, jointedIds, size);
+
+	dstImg = jointTwo(dstImg, img_vec[6], { 3, 6 }, jointedIds, size);
+	dstImg = jointTwo(dstImg, img_vec[7], { 4, 7 }, jointedIds, size);
+	dstImg = jointTwo(dstImg, img_vec[8], { 5, 8 }, jointedIds, size);
+
 	imshow("Merged Img", dstImg);
 	waitKey(0);
 	return 0;
 }
+
 
